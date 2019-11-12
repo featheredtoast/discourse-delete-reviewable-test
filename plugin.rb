@@ -8,7 +8,6 @@
 
 def trigger_post_classification(post)
   # Use Job queue
-  # Rails.logger.debug("sift_debug: Using Job method")
   Jobs.enqueue(:delete_post, post_id: post.id)
   # performed_by = Discourse.system_user
   # PostDestroyer.new(performed_by, post).destroy
@@ -19,7 +18,6 @@ after_initialize do
     begin
       trigger_post_classification(post)
     rescue StandardError => e
-      Rails.logger.error("sift_debug: Exception in post_create: #{e.inspect}")
       raise e
     end
   end
@@ -71,7 +69,7 @@ after_initialize do
     def build_action(actions, id, icon:, bundle: nil, key:)
       actions.add(id, bundle: bundle) do |action|
         action.icon = icon
-        action.label = "js.sift.#{key}"
+        action.label = "js.#{key}"
       end
     end
 
